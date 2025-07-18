@@ -1,14 +1,12 @@
 package com.tom.giatom.controller;
 
+import com.tom.giatom.DAO.UsuarioLogin;
 import com.tom.giatom.entity.Usuario;
 import com.tom.giatom.serviceImpl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
@@ -18,8 +16,11 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario){
-        Usuario nuevousuario = usuarioService.registrarUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevousuario);
+        return usuarioService.registrarUsuario(usuario);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUsuario(@RequestBody UsuarioLogin usuarioLogin) {
+        return usuarioService.loginUsuario(usuarioLogin.getCorreo(), usuarioLogin.getContrasena());
+    }
 }
