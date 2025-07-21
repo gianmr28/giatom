@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioLogin {
-    private String correo;
-    private String contrasena;
+public class CompraRequestDTO {
+    private Integer idusuario;
+    private List<DetalleCompraDTO> detalle;
 }

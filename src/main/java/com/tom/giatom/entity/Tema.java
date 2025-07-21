@@ -2,12 +2,14 @@ package com.tom.giatom.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tema")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Tema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

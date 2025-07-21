@@ -2,6 +2,7 @@ package com.tom.giatom.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Table(name = "certificado")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Certificado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
