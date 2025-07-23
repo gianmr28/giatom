@@ -4,8 +4,12 @@ import com.tom.giatom.DAO.CompraRequestDTO;
 import com.tom.giatom.DAO.DetalleCompraDTO;
 import com.tom.giatom.entity.Compra;
 import com.tom.giatom.entity.DetalleCompra;
+import com.tom.giatom.entity.ProgresoTema;
+import com.tom.giatom.entity.Tema;
 import com.tom.giatom.repository.CompraRepository;
 import com.tom.giatom.repository.DetalleCompraRepository;
+import com.tom.giatom.repository.ProgresoTemaRepository;
+import com.tom.giatom.repository.TemaRepository;
 import com.tom.giatom.service.CompraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +27,10 @@ import java.util.List;
 public class CompraServiceImpl implements CompraService {
     @Autowired
     private CompraRepository compraRepository;
+    @Autowired
+    private TemaRepository temaRepository;
+    @Autowired
+    private ProgresoTemaRepository progresoTemaRepository;
     @Autowired
     private DetalleCompraRepository detalleCompraRepository;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -57,6 +66,23 @@ public class CompraServiceImpl implements CompraService {
         }
 
         detalleCompraRepository.saveAll(listaDetalleCompraReal);
+
+        List<Tema> temasComprados = new ArrayList<>();
+
+        for(DetalleCompraDTO d : compra.getDetalle()){
+            Long idCursoLong = d.getIdcurso().longValue();
+            List<Tema> temasbuscados = temaRepository.findAllByIdcurso(idCursoLong);
+            temasComprados.addAll(temasbuscados);
+        }
+
+        List<ProgresoTema> progresoTemasAnadir = new ArrayList<>();
+
+        for (Tema t : temasComprados){
+            ProgresoTema progresoTema = new ProgresoTema(null, t.getIdtema(), compra.getIdusuario(), "n", fechaSoloFecha, null);
+            progresoTemasAnadir.add(progresoTema);
+        }
+
+        progresoTemaRepository.saveAll(progresoTemasAnadir);
 
         return ResponseEntity.status(HttpStatus.OK).body(compraGuardada);
     }
